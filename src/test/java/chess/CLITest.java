@@ -108,8 +108,8 @@ public class CLITest {
     /**
      * Helper method which splits the single board string into a list of individual lines
      *
-     * @param board
-     * @return
+     * @param board          The board as a string
+     * @return Stack<String> A stack of board rows, ordered from row 1 (index 0) => 8 (index 7)
      */
     private Stack<String> splitBoardByRow(String board) {
         // Create a new arraylist of the board's rows by line
