@@ -9,7 +9,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+import com.google.common.collect.Lists;
 
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
@@ -68,6 +71,58 @@ public class CLITest {
 
         assertEquals("Should have had 9 output calls", 9, output.size());
         assertEquals("It should have printed the board three times", output.get(2), output.get(4));
+    }
+
+    @Test
+    public void testNewBoard() throws Exception {
+        runCliWithInput();
+        List<String> output = captureOutput();
+
+        assertEquals("Should have 4 output calls", 4, output.size());
+        assertTrue("It's the white's move", output.get(3).contains("White's Move"));
+
+        Stack<String> rows = splitBoardByRow(output.get(2));
+
+        assertEquals(
+                "The board print's the black player's first row",
+                "8 | R | N | B | Q | K | B | N | R | 8",
+                rows.get(7)
+        );
+        assertEquals(
+                "The board print's the black player's second row",
+                "7 | P | P | P | P | P | P | P | P | 7",
+                rows.get(6)
+        );
+        assertEquals(
+                "The board print's the white player's first row",
+                "1 | r | n | b | q | k | b | n | r | 1",
+                rows.get(0)
+        );
+        assertEquals(
+                "The board print's the black player's second row",
+                "2 | p | p | p | p | p | p | p | p | 2",
+                rows.get(1)
+        );
+    }
+
+    /**
+     * Helper method which splits the single board string into a list of individual lines
+     *
+     * @param board
+     * @return
+     */
+    private Stack<String> splitBoardByRow(String board) {
+        // Create a new arraylist of the board's rows by line
+        List<String> rows = Lists.newArrayList(board.split(System.getProperty("line.separator")));
+
+        Stack<String> stack = new Stack<String>();
+        for (String row : Lists.reverse(rows)) {
+            if (row.substring(0, 1).matches("\\d")) {
+                stack.push(row);
+            }
+        }
+
+        return stack;
     }
 
     private List<String> captureOutput() {
