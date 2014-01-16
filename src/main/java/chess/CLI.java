@@ -1,6 +1,7 @@
 package chess;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * This class provides the basic CLI interface to the Chess game.
@@ -61,7 +62,7 @@ public class CLI {
                 writeOutput("Goodbye!");
                 System.exit(0);
             } else if (input.equals("list")) {
-                writeOutput("Sorry; 'list' is not yet implemented");
+                showMoves();
             } else if (input.startsWith("move")) {
                 writeOutput("Sorry; 'move' is not yet implemented");
             } else {
@@ -71,7 +72,6 @@ public class CLI {
     }
 
     private void showBoard() {
-
         writeOutput(getBoardAsString());
     }
 
@@ -83,6 +83,25 @@ public class CLI {
         writeOutput("    'board'                      Show the chess board");
         writeOutput("    'list'                       List all possible moves");
         writeOutput("    'move <colrow> <colrow>'     Make a move");
+    }
+
+    private void showMoves() {
+        // Print out the current player's
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(gameState.getCurrentPlayer() + "'s Possible Moves: ");
+        getMovesAsString(builder);
+
+        writeOutput(builder.toString());
+    }
+
+    private String getMovesAsString(StringBuilder builder) {
+        List<?> moves = gameState.showMoves();
+        for (Object move : moves) {
+            builder.append("    ").append(move.toString()).append(NEWLINE);
+        }
+
+        return builder.toString();
     }
 
     /**
@@ -107,7 +126,12 @@ public class CLI {
     private void printSquares(int rowLabel, StringBuilder builder) {
         builder.append(rowLabel);
         for (char c = GameState.MIN_COLUMN; c <= GameState.MAX_COLUMN; c++) {
-            builder.append(" |  ");
+            String location = String.valueOf(c) + rowLabel;
+            if (GameState.isPieceAt(location)) {
+                builder.append(" | " + GameState.getPieceAt(location).toString());
+            } else {
+                builder.append(" |  ");
+            }
         }
         builder.append(" | ").append(rowLabel).append(NEWLINE);
     }
