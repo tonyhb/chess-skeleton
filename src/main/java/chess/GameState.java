@@ -16,7 +16,7 @@ public class GameState {
 
     private Player currentPlayer = Player.White;
 
-    private static Map<String, Base> pieces = new HashMap<String, Base>();
+    private static Map<String, Base> _pieces = new HashMap<String, Base>();
 
     /**
      * Create the game state.
@@ -53,24 +53,18 @@ public class GameState {
     /**
      * Implements adding a row of pieces to the GameState for a player.
      *
-     * @param row
-     * @param player
-     * @param items
+     * @param row     The row we're creating
+     * @param player  The player we're adding pieces for
+     * @param items   A variadic list of 8 chess pieces to add
      */
     private void createRow(int row, Player player, chess.piece.Base... items) {
-
-        // Convert the variadic parameter to a list, allowing us to use .get()
         List<? extends chess.piece.Base> list = Arrays.asList(items);
 
-        int i = 0;
-        for (char c = MIN_COLUMN; c <= MAX_COLUMN; c++) {
-            String location = String.valueOf(c) + row;
-
-            Base item = list.get(i);
-            item.setPlayer(player).setLocation(location);
-
-            pieces.put(location, item);
-            i++;
+        int n = 0;
+        for (char i = MIN_COLUMN; i <= MAX_COLUMN; i++) {
+            Base piece = list.get(n).setPlayer(player);
+            _pieces.put(String.valueOf(i) + row, piece);
+            n++;
         }
     }
 
@@ -78,20 +72,37 @@ public class GameState {
         return currentPlayer;
     }
 
-    public static boolean isPieceAt(String location) {
-        if (pieces.get(location) == null) {
+    public static boolean isPieceAt(Position pos) {
+        return isPieceAt(pos.toString());
+    }
+
+    public static boolean isPieceAt(String position) {
+        if (_pieces.get(position) == null) {
             return false;
         }
         return true;
     }
 
     public static Base getPieceAt(String location) {
-        return pieces.get(location);
+        return _pieces.get(location);
     }
 
-    public List<?> showMoves() {
+    public List<Position> showMoves() {
         // @TODO: Show moves for all pieces of the current player
-        return null;
+        List<Position> moves = new ArrayList<Position>();
+
+        for (Map.Entry<String, ? extends Base> item : _pieces.entrySet()) {
+            String pos = item.getKey();
+            Base piece = item.getValue();
+
+            if (piece.getPlayer() != currentPlayer) {
+                continue;
+            }
+
+            moves.addAll(piece.listMoves(pos));
+        }
+
+        return moves;
     }
 
     /**
