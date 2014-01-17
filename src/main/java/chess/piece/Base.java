@@ -1,55 +1,58 @@
 package chess.piece;
 import chess.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Tony Holdstock-Brown on 10/01/2014.
  */
-abstract public class Base {
-    protected Type type;
+    abstract public class Base {
+        protected Type type;
 
-    protected String location;
-    protected chess.Player player;
-    protected boolean hasMoved;
+        protected Player player;
+        protected boolean moved;
 
-    protected Base() {
-        this.hasMoved = false;
-    }
-
-    public Base setPlayer(Player player) throws RuntimeException {
-        if (this.player == null) {
-            this.player = player;
-        } else {
-            throw new RuntimeException("Player has already been set");
+        protected Base() {
+            this.moved = false;
         }
 
-        return this;
-    }
+        public Base setPlayer(Player player) throws RuntimeException {
+            if (this.player == null) {
+                this.player = player;
+            } else {
+                throw new RuntimeException("Player has already been set");
+            }
 
-    public Base setLocation(String location) throws RuntimeException {
-        if (this.location == null) {
-            this.location = location;
-        } else {
-            throw new RuntimeException("Location has already been set; please use move() to move the chess piece");
-        }
-        return this;
-    }
-
-    public chess.piece.Type getType() {
-        return type;
-    }
-
-    public String toString() {
-        // If there's no abbreviation set, use the first letter of the piece type
-        String abbr = this.type.getLetter();
-
-        if (this.player == Player.White) {
-            abbr = abbr.toLowerCase();
-        } else {
-            abbr = abbr.toUpperCase();
+            return this;
         }
 
-        return abbr;
-    }
+        public Player getPlayer() {
+            return this.player;
+        }
 
-    abstract boolean move(String to);
+        public boolean hasMoved() {
+            return this.moved;
+        }
+
+        public Type getType() {
+            return type;
+        }
+
+        public String toString() {
+            // If there's no abbreviation set, use the first letter of the piece type
+            String abbr = this.type.getLetter();
+
+            if (this.player == Player.White) {
+                abbr = abbr.toLowerCase();
+            } else {
+                abbr = abbr.toUpperCase();
+            }
+
+            return abbr;
+        }
+
+        public abstract List<Position> listMoves(String position);
+
+        abstract boolean move(String to);
 }
