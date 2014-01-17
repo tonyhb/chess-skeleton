@@ -87,16 +87,15 @@ public class CLI {
 
     private void showMoves() {
         // Print out the current player's
+        writeOutput(gameState.getCurrentPlayer() + "'s Possible Moves:");
+
         StringBuilder builder = new StringBuilder();
-
-        builder.append(gameState.getCurrentPlayer() + "'s Possible Moves: ");
         getMovesAsString(builder);
-
         writeOutput(builder.toString());
     }
 
     private String getMovesAsString(StringBuilder builder) {
-        List<?> moves = gameState.showMoves();
+        List<Position> moves = gameState.showMoves();
         for (Object move : moves) {
             builder.append("    ").append(move.toString()).append(NEWLINE);
         }
