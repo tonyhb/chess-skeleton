@@ -95,9 +95,9 @@ public class CLI {
     }
 
     private String getMovesAsString(StringBuilder builder) {
-        List<Position> moves = gameState.showMoves();
+        List<String> moves = gameState.showMoves();
         for (Object move : moves) {
-            builder.append("    ").append(move.toString()).append(NEWLINE);
+            builder.append("    ").append(move).append(NEWLINE);
         }
 
         return builder.toString();

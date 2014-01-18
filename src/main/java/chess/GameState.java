@@ -87,9 +87,9 @@ public class GameState {
         return _pieces.get(location);
     }
 
-    public List<Position> showMoves() {
+    public List<String> showMoves() {
         // @TODO: Show moves for all pieces of the current player
-        List<Position> moves = new ArrayList<Position>();
+        List<String> moves = new ArrayList<String>();
 
         for (Map.Entry<String, ? extends Base> item : _pieces.entrySet()) {
             String pos = item.getKey();
