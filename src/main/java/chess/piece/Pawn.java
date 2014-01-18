@@ -1,7 +1,9 @@
 package chess.piece;
 import chess.GameState;
+import chess.MoveBuilder.MoveBuilder;
 import chess.Player;
 import chess.Position;
+import javafx.geometry.Pos;
 
 import java.util.*;
 
@@ -16,29 +18,54 @@ public class Pawn extends Base {
     }
 
     @Override
-    public List<Position> listMoves(String pos) {
-        Position position = new Position(pos);
-        List<Position> moves = new ArrayList<Position>();
+    public List<String> listMoves(String pos) {
+        List<Position> possible = findPossibleMoves(pos);
+        ArrayList<String> moves = new ArrayList<String>();
 
-        int maxDistance = 2;
+        for (Position position : possible) {
+            moves.add(pos + " " + position.toString());
+        }
+
+        return moves;
+    }
+
+    @Override
+    public List<Position> findPossibleMoves(String pos) {
+        ArrayList<Position> moves = new ArrayList<Position>();
+
+        // Get the vertical moves - which is essnetially moving forward one or two.
+        MoveBuilder vertical = this.newMoveBuilder(pos);
+        // And see if there are any opposing pieces we can capture.
+        MoveBuilder lDiagonal = this.newMoveBuilder(pos)
+            .setLimit(1)
+            .setTransformColumn("-1")
+            .setRequiresOpposingPiece(true);
+        MoveBuilder rDiagonal = this.newMoveBuilder(pos)
+            .setLimit(1)
+            .setTransformColumn("+1")
+            .setRequiresOpposingPiece(true);
+
+        if (this.getPlayer() == Player.White) {
+            vertical.setTransformRow("+1");
+            lDiagonal.setTransformRow("+1");
+            rDiagonal.setTransformRow("+1");
+        } else {
+            vertical.setTransformRow("-1");
+            lDiagonal.setTransformRow("-1");
+            rDiagonal.setTransformRow("-1");
+        }
+
         if (this.hasMoved()) {
-            maxDistance = 1;
+            vertical.setLimit(1);
+        } else {
+            vertical.setLimit(2);
         }
 
-        for (int n = 1; n <= maxDistance; n++) {
-            if (this.getPlayer() == Player.Black) {
-                Position newPos = new Position(position.column, position.row - n);
-            } else {
-                Position newPos = new Position(position.column, position.row + n);
-            }
+        // Add the vertical moves to our move list.
+        moves.addAll(vertical.list());
+        moves.addAll(lDiagonal.list());
+        moves.addAll(rDiagonal.list());
 
-            if (GameState.isPieceAt(newPos)) {
-                break;
-            }
-            moves.add(newPos);
-        }
-
-        // @TODO: Check if there's a piece we can capture.
         return moves;
     }
 

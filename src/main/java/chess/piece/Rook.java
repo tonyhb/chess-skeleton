@@ -17,13 +17,14 @@ public class Rook extends Base {
         this.type = type.ROOK;
     }
 
+    /*
     public List<Position> listMoves(String pos) {
         Position position = new Position(pos);
         List<Position> moves = new ArrayList<Position>();
 
         // Look south
         for (int n = position.row - 1; n >= GameState.MIN_ROW; n--) {
-            Position newPos = new Position(pos.column, n);
+            Position newPos = new Position(position.column, n);
             if (GameState.isPieceAt(newPos)) {
                 break;
             }
@@ -32,7 +33,7 @@ public class Rook extends Base {
 
         // Look north
         for (int n = position.row + 1; n <= GameState.MAX_ROW; n++) {
-            Position newPos = new Position(pos.column, n);
+            Position newPos = new Position(position.column, n);
             if (GameState.isPieceAt(newPos)) {
                 break;
             }
@@ -58,6 +59,9 @@ public class Rook extends Base {
 
         return moves;
     }
+    */
+    public List<String> listMoves(String pos) { return null; }
+    public List<Position> findPossibleMoves(String pos) { return null; }
 
     public boolean move(String to) {
         return false;
