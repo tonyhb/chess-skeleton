@@ -1,9 +1,8 @@
 package chess.piece;
-import chess.GameState;
+
 import chess.MoveBuilder.MoveBuilder;
 import chess.Player;
 import chess.Position;
-import javafx.geometry.Pos;
 
 import java.util.*;
 
@@ -18,41 +17,23 @@ public class Pawn extends Base {
     }
 
     @Override
-    public List<String> listMoves(String pos) {
-        List<Position> possible = findPossibleMoves(pos);
-        ArrayList<String> moves = new ArrayList<String>();
-
-        for (Position position : possible) {
-            moves.add(pos + " " + position.toString());
-        }
-
-        return moves;
-    }
-
-    @Override
     public List<Position> findPossibleMoves(String pos) {
         ArrayList<Position> moves = new ArrayList<Position>();
 
         // Get the vertical moves - which is essnetially moving forward one or two.
         MoveBuilder vertical = this.newMoveBuilder(pos);
         // And see if there are any opposing pieces we can capture.
-        MoveBuilder lDiagonal = this.newMoveBuilder(pos)
+        MoveBuilder diagonal = this.newMoveBuilder(pos)
             .setLimit(1)
             .setTransformColumn("-1")
-            .setRequiresOpposingPiece(true);
-        MoveBuilder rDiagonal = this.newMoveBuilder(pos)
-            .setLimit(1)
-            .setTransformColumn("+1")
             .setRequiresOpposingPiece(true);
 
         if (this.getPlayer() == Player.White) {
             vertical.setTransformRow("+1");
-            lDiagonal.setTransformRow("+1");
-            rDiagonal.setTransformRow("+1");
+            diagonal.setTransformRow("+1");
         } else {
             vertical.setTransformRow("-1");
-            lDiagonal.setTransformRow("-1");
-            rDiagonal.setTransformRow("-1");
+            diagonal.setTransformRow("-1");
         }
 
         if (this.hasMoved()) {
@@ -63,8 +44,9 @@ public class Pawn extends Base {
 
         // Add the vertical moves to our move list.
         moves.addAll(vertical.list());
-        moves.addAll(lDiagonal.list());
-        moves.addAll(rDiagonal.list());
+        // Add the diagonal moves ot our list
+        moves.addAll(diagonal.list());
+        moves.addAll(diagonal.setTransformColumn("+1").list());
 
         return moves;
     }

@@ -1,8 +1,7 @@
 package chess.piece;
-import chess.Player;
 import chess.Position;
 
-import java.util.List;
+import java.util.*;
 
 import static chess.piece.Type.*;
 
@@ -20,7 +19,9 @@ public class Knight extends Base {
         return false;
     }
 
-    public List<String> listMoves(String pos) { return null; }
-    public List<Position> findPossibleMoves(String pos) { return null; }
+    public List<Position> findPossibleMoves(String pos) {
+        ArrayList<Position> moves = new ArrayList<Position>();
+        return moves;
+    }
 
 }
