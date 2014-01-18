@@ -83,6 +83,10 @@ public class GameState {
         return true;
     }
 
+    public static Base getPieceAt(Position pos) {
+        return getPieceAt(pos.toString());
+    }
+
     public static Base getPieceAt(String location) {
         return _pieces.get(location);
     }
