@@ -29,16 +29,16 @@ abstract public class Base {
     }
 
     public Player getPlayer() {
-                            return this.player;
-                                                               }
+        return this.player;
+    }
 
     public boolean hasMoved() {
         return this.moved;
     }
 
     public Type getType() {
-                        return type;
-                                                }
+        return type;
+    }
 
     public String toString() {
         // If there's no abbreviation set, use the first letter of the piece type
@@ -53,9 +53,24 @@ abstract public class Base {
         return abbr;
     }
 
-    public abstract List<String> listMoves(String position);
+    /**
+     * Lists all possible moves in the helper format:
+     *   "XY AB"
+     * where XY is the current location and AB is a possible move.
+     *
+     * @param pos  The current location of the chess piece
+     * @return     An array of strings corresponding to each move
+     */
+    public List<String> listMoves(String pos) {
+        List<Position> possible = findPossibleMoves(pos);
+        ArrayList<String> moves = new ArrayList<String>();
 
-    public abstract List<Position> findPossibleMoves(String position);
+        for (Position position : possible) {
+            moves.add(pos + " " + position.toString());
+        }
+
+        return moves;
+    }
 
     /**
      * Returns a new MoveBuilder with the origin and piece auto-filled. Convenience function for listMoves().
@@ -67,5 +82,7 @@ abstract public class Base {
         return new MoveBuilder().setOrigin(new Position(pos)).setPiece(this);
     }
 
-    abstract boolean move(String to);
+    public abstract List<Position> findPossibleMoves(String position);
+
+    public abstract boolean move(String to);
 }
