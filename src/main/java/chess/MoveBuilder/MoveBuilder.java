@@ -129,9 +129,9 @@ public class MoveBuilder {
                 }
             }
 
-            if (row < GameState.MIN_ROW &&
-                row > GameState.MAX_ROW &&
-                column < GameState.MIN_COLUMN &&
+            if (row < GameState.MIN_ROW ||
+                row > GameState.MAX_ROW ||
+                column < GameState.MIN_COLUMN ||
                 column > GameState.MAX_COLUMN)
             {
                 // The transformations went outside the boards boundaries - we can quit.
@@ -140,7 +140,7 @@ public class MoveBuilder {
 
             Position pos = new Position(column, row);
 
-            Boolean isPieceAt = GameState.isPieceAt(pos);
+            boolean isPieceAt = GameState.isPieceAt(pos);
 
             if (isPieceAt) {
                 // If this is an opponent's piece, we should be able to capture it.
