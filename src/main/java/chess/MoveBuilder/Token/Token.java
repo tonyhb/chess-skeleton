@@ -32,4 +32,22 @@ public class Token {
         return original;
     }
 
+    public void flip() {
+        switch (this.type) {
+            case ADD:
+                this.type = TokenType.SUBTRACT;
+                break;
+            case SUBTRACT:
+                this.type = TokenType.ADD;
+                break;
+            case MULTIPLY:
+                this.type = TokenType.DIVIDE;
+                break;
+            case DIVIDE:
+                this.type = TokenType.MULTIPLY;
+                break;
+        }
+    }
+
+
 }

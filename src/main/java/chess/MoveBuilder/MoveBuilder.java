@@ -110,6 +110,34 @@ public class MoveBuilder {
         return list;
     }
 
+    /**
+     * Flips all transforms added to the MoveBuilder, eg. "+1" becomes "-1" for any transform.
+     * This allows us to check the entire column above and below a piece with ease - set up
+     * a builder for searching above a piece, get all moves, call flip() and get the list again.
+     *
+     * @return this
+     */
+    public MoveBuilder flip() {
+        if (transformColumn != null) {
+            ArrayList<Token> flippedColumn = new ArrayList<Token>();
+            for (Token token : transformColumn) {
+                token.flip();
+                flippedColumn.add(token);
+            }
+            transformColumn = flippedColumn;
+        }
+        if (transformRow != null) {
+            ArrayList<Token> flippedRow = new ArrayList<Token>();
+            for (Token token : transformRow) {
+                token.flip();
+                flippedRow.add(token);
+            }
+            transformRow = flippedRow;
+        }
+
+        return this;
+    }
+
     public ArrayList<Position> list() {
         ArrayList<Position> list = new ArrayList<Position>();
         char column = this.origin.column;
